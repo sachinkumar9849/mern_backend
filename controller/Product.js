@@ -1,19 +1,28 @@
-const { Product } = require("../model/Product");
+const { Product } = require('../model/Product');
 
 exports.createProduct = async (req, res) => {
+  // this product we have to get from API body
+  const product = new Product(req.body);
   try {
-    const product = new Product(req.body);
-    const savedProduct = await product.save();
-    res.status(201).json(savedProduct);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({ error: "Failed to create product" });
+    const doc = await product.save();
+    res.status(201).json(doc);
+  } catch (err) {
+    res.status(400).json(err);
   }
 };
 
 exports.fetchAllProducts = async (req, res) => {
-  let query = Product.find({});
-  let totalProductsQuery = Product.find({});
+  // filter = {"category":["smartphone","laptops"]}
+  // sort = {_sort:"price",_order="desc"}
+  // pagination = {_page:1,_limit=10}
+  // TODO : we have to try with multiple category and brands after change in front-end
+  let condition = {}
+  if(!req.query.admin){
+      condition.deleted = {$ne:true}
+  }
+  
+  let query = Product.find(condition);
+  let totalProductsQuery = Product.find(condition);
 
   if (req.query.category) {
     query = query.find({ category: req.query.category });
@@ -25,6 +34,7 @@ exports.fetchAllProducts = async (req, res) => {
     query = query.find({ brand: req.query.brand });
     totalProductsQuery = totalProductsQuery.find({ brand: req.query.brand });
   }
+  //TODO : How to get sort on discounted Price not on Actual price
   if (req.query._sort && req.query._order) {
     query = query.sort({ [req.query._sort]: req.query._order });
   }
@@ -37,18 +47,19 @@ exports.fetchAllProducts = async (req, res) => {
     const page = req.query._page;
     query = query.skip(pageSize * (page - 1)).limit(pageSize);
   }
+
   try {
     const docs = await query.exec();
-    res.set("X-Total-Count", totalDocs);
+    res.set('X-Total-Count', totalDocs);
     res.status(200).json(docs);
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: "Failed to fetch products" });
+    res.status(400).json(err);
   }
 };
 
 exports.fetchProductById = async (req, res) => {
   const { id } = req.params;
+
   try {
     const product = await Product.findById(id);
     res.status(200).json(product);
@@ -57,14 +68,12 @@ exports.fetchProductById = async (req, res) => {
   }
 };
 
-exports.updateProduct = async(req,res)=>{
-  const {id} = req.params;
-  try{
-    const product = await Product.findByIdAndUpdate(id,req.body,{new:true});
+exports.updateProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findByIdAndUpdate(id, req.body, {new:true});
     res.status(200).json(product);
-  }catch(err){
-    res.status(400).json(err)
+  } catch (err) {
+    res.status(400).json(err);
   }
-}
-
-// http://localhost:8080/products?category=smartphone&_sort=price&_order=asc&_page=2&_limit=2
+};
