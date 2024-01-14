@@ -7,6 +7,8 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { createProduct } = require("./controller/Product");
+const sliderRouter = require("./routes/Slider");
+
 const productsRouter = require("./routes/Products");
 const categoriesRouter = require("./routes/Categories");
 const ExtractJwt = require("passport-jwt").ExtractJwt;
@@ -21,6 +23,7 @@ const crypto = require("crypto");
 const JwtStrategy = require("passport-jwt").Strategy;
 
 const { isAuth, sanitizeUser, cookieExtractor } = require('./services/common');
+
 
 const SECRET_KEY = "SECRET_KEY";
 
@@ -57,6 +60,9 @@ server.use("/users", isAuth(), usersRouter.router);
 server.use("/auth", authRouter.router);
 server.use("/cart", isAuth(), cartRouter.router);
 server.use("/orders", ordersRouter.router);
+;
+server.use("/slider", isAuth(), sliderRouter.router);
+
 
 // Passport Strategies
 passport.use(
