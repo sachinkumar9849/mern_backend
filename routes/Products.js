@@ -5,6 +5,7 @@ const {
   fetchAllProducts,
   fetchProductById,
   updateProduct,
+  searchProductController,
 } = require("../controller/Product");
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router
   .post("/", createProduct)
   .get("/", fetchAllProducts)
   .get("/:id", fetchProductById)
-  .patch("/:id", updateProduct);
+  .patch("/:id", updateProduct)
+  .get("/search/:keyword",searchProductController)
 
 exports.router = router;

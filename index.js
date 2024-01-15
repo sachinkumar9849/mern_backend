@@ -22,8 +22,7 @@ const { User } = require("./model/User");
 const crypto = require("crypto");
 const JwtStrategy = require("passport-jwt").Strategy;
 
-const { isAuth, sanitizeUser, cookieExtractor } = require('./services/common');
-
+const { isAuth, sanitizeUser, cookieExtractor } = require("./services/common");
 
 const SECRET_KEY = "SECRET_KEY";
 
@@ -34,7 +33,7 @@ opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = "SECRET_KEY";
 
 //middlewares
-server.use(express.static('build'))
+server.use(express.static("build"));
 server.use(cookieParser());
 server.use(
   session({
@@ -60,7 +59,6 @@ server.use("/users", isAuth(), usersRouter.router);
 server.use("/auth", authRouter.router);
 server.use("/cart", isAuth(), cartRouter.router);
 server.use("/orders", ordersRouter.router);
-;
 server.use("/slider", isAuth(), sliderRouter.router);
 
 
@@ -88,7 +86,7 @@ passport.use(
             return done(null, false, { message: "Invalid credentials" });
           }
           const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
-          done(null, {token});
+          done(null, { token });
         }
       );
     } catch (err) {
@@ -103,7 +101,7 @@ passport.use(
     console.log({ jwt_payload });
     try {
       const user = await User.findById(jwt_payload.id);
-     
+
       if (user) {
         return done(null, sanitizeUser(user));
       } else {
