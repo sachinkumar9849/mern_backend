@@ -87,6 +87,8 @@ exports.searchProductController = async (req, res) => {
       $or: [
         { title: { $regex: keyword, $options: "i" } },
         { category: { $regex: keyword, $options: "i" } },
+        { brand: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
       ],
     }).select("-photo");
     res.json(results);

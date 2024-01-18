@@ -15,6 +15,6 @@ router
   .get("/", fetchAllProducts)
   .get("/:id", fetchProductById)
   .patch("/:id", updateProduct)
-  .get("/search/:keyword",searchProductController)
+  .get("/search/:keyword", searchProductController);
 
 exports.router = router;

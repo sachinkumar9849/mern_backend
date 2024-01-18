@@ -10,6 +10,8 @@ const { createProduct } = require("./controller/Product");
 const sliderRouter = require("./routes/Slider");
 
 const productsRouter = require("./routes/Products");
+const wishlistRoutes = require("./routes/Wishlist");
+
 const categoriesRouter = require("./routes/Categories");
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const cookieParser = require("cookie-parser");
@@ -60,7 +62,7 @@ server.use("/auth", authRouter.router);
 server.use("/cart", isAuth(), cartRouter.router);
 server.use("/orders", ordersRouter.router);
 server.use("/slider", isAuth(), sliderRouter.router);
-
+server.use("/wishlist", isAuth(), wishlistRoutes.router);
 
 // Passport Strategies
 passport.use(
