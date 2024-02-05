@@ -87,7 +87,7 @@ passport.use(
             sanitizeUser(user),
             process.env.JWT_SECRET_KEY
           );
-          done(null, { id: user.id, role: user.role ,token});
+          done(null, { id: user.id, role: user.role, token });
         }
       );
     } catch (err) {
@@ -127,12 +127,10 @@ passport.deserializeUser(function (user, cb) {
 });
 
 main().catch((err) => console.log(err));
-
 async function main() {
   await mongoose.connect(process.env.MONGODB_URL);
   console.log("database connected");
 }
-
 server.listen(process.env.PORT, () => {
   console.log("server started");
 });
