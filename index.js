@@ -23,6 +23,7 @@ const { User } = require("./model/User");
 const crypto = require("crypto");
 const JwtStrategy = require("passport-jwt").Strategy;
 const { isAuth, sanitizeUser, cookieExtractor } = require("./services/common");
+const path = require("path")
 
 // JWT option
 const opts = {};
@@ -31,7 +32,8 @@ opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = process.env.JWT_SECRET_KEY;
 
 //middlewares
-server.use(express.static("build"));
+// server.use(express.static("build"));
+server.use(express.static(path.resolve(__dirname,"build")))
 server.use(cookieParser());
 server.use(
   session({
